@@ -15,9 +15,26 @@
 #include "movies.h"
 
 void appendNode(MovieList& list, const Movie& m) {
-    // TODO
-    (void)list;
-    (void)m;
+
+    Node* newNode = new Node;
+    newNode->data = m;
+    newNode->next = nullptr;
+    newNode->prev = nullptr;
+        
+    //case 1: append to empty list
+    if (list.head == nullptr)
+    {
+        list.head = newNode;
+        list.tail = newNode
+    }
+    else
+    {
+        //case 2: append to end of current list
+        list.tail->next = newNode;
+        newNode->prev = list.tail;
+        list.tail = newNode;
+    }
+    list.size++;
 }
 
 bool comesBefore(const Movie& a, const Movie& b) {
@@ -43,7 +60,8 @@ void printList(const MovieList& list) {
 }
 
 void printFiltered(const MovieList& list, int year, const std::string& actor,
-                   const std::string& title) {
+                   const std::string& title) 
+{
     // TODO
     (void)list;
     (void)year;
@@ -51,7 +69,19 @@ void printFiltered(const MovieList& list, int year, const std::string& actor,
     (void)title;
 }
 
-void clearList(MovieList& list) {
-    // TODO
-    (void)list;
+void clearList(MovieList& list) 
+{
+    //traverse list using fresh pointers and delete all nodes 
+    Node* current = list.head;
+    while (current != nullptr)
+    {
+        Node* nextNode = current->next;
+        delete current;
+        current = nextNode;    
+    }
+
+    //reset list pointers
+    list.head = nullptr;
+    list.tail = nullptr;
+    list.size = 0;
 }
