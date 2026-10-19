@@ -51,27 +51,6 @@ bool comesBefore(const Movie& a, const Movie& b)
     return a.actor < b.actor;
  }
 
-void sortList(MovieList& list) {
-
-    if (list.head == nullptr || list.head->next == nullptr)
-    {
-        return;
-    }
-
-    // Sort the nodes recursively
-    list.head = mergeSortRecursive(list.head);
-
-    // Re-anchor the tail pointer and clean up the head's prev pointer
-    list.head->prev = nullptr;
-    Node* current = list.head;
-    while (current->next != nullptr) 
-    {
-        current = current->next;
-    }
-    list.tail = current;
-    
-}
-
 //helper func for mergesort
 static void splitList(Node* head, Node** front, Node** back)
 {
@@ -156,6 +135,26 @@ static Node* mergeSortRecursive(Node* head)
     return sortedMerge(front, back);   
 }
 
+void sortList(MovieList& list) {
+
+    if (list.head == nullptr || list.head->next == nullptr)
+    {
+        return;
+    }
+
+    // Sort the nodes recursively
+    list.head = mergeSortRecursive(list.head);
+
+    // Re-anchor the tail pointer and clean up the head's prev pointer
+    list.head->prev = nullptr;
+    Node* current = list.head;
+    while (current->next != nullptr) 
+    {
+        current = current->next;
+    }
+    list.tail = current;
+    
+}
 
 void removeDuplicates(MovieList& list) {
   //base case: return unedited list (0 or 1 element)
@@ -196,18 +195,58 @@ void removeDuplicates(MovieList& list) {
 }
 
 void printList(const MovieList& list) {
-    // TODO
-    (void)list;
+    Node* current = list.head;
+    while (current != nullptr) 
+    {
+        std::cout << current->data.year << " | " 
+                  << current->data.title << " | " 
+                  << current->data.actor << "\n";
+        current = current->next;
+    }
 }
 
 void printFiltered(const MovieList& list, int year, const std::string& actor,
                    const std::string& title) 
 {
-    // TODO
-    (void)list;
-    (void)year;
-    (void)actor;
-    (void)title;
+    Node* current = list.head;
+    int matchCount = 0;
+
+    //traverse list find films matching filter
+    while (current != nullptr)
+    {
+        bool match = false;
+
+        //check if current movie lands on any of the possible filters
+        if (year != 0 && current->data.year == year)
+        {
+            match = true;
+        }
+        else if (!actor.empty() && current->data.actor == actor)
+        {
+            match = true;
+        }
+        else if (!title.empty() && current->data.title == title)
+        {
+            match = true;        
+        }
+        
+        //print the match we find
+        if (match)
+        {
+            std::cout << current->data.year << " | " 
+                      << current->data.title << " | " 
+                      << current->data.actor << "\n";
+            matchCount++;
+        }
+
+        current = current->next;
+    }
+
+    //filter produced zero results
+    if (matchCount == 0)
+    {
+        std::cout << "No results\n";
+    }
 }
 
 void clearList(MovieList& list) 
