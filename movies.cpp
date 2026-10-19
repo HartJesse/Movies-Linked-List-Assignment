@@ -25,7 +25,7 @@ void appendNode(MovieList& list, const Movie& m) {
     if (list.head == nullptr)
     {
         list.head = newNode;
-        list.tail = newNode
+        list.tail = newNode;
     }
     else
     {
