@@ -37,16 +37,23 @@ void appendNode(MovieList& list, const Movie& m) {
     list.size++;
 }
 
-bool comesBefore(const Movie& a, const Movie& b) {
-    // TODO
-    (void)a;
-    (void)b;
-    return false;
-}
+bool comesBefore(const Movie& a, const Movie& b) 
+{
+    //check if year is correct
+    if (a.year != b.year) 
+    {
+        return a.year < b.year;
+    }
+    if (a.title != b.title) 
+    {
+        return a.title < b.title;
+    }
+    return a.actor < b.actor;
+ }
 
 void sortList(MovieList& list) {
-    // TODO
-    (void)list;
+
+    
 }
 
 void removeDuplicates(MovieList& list) {
