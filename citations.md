@@ -1,7 +1,7 @@
 # Citations
 
-**Name:**
-**Student ID:**
+**Name: Jesse Hart**
+**Student ID: 2306453**
 
 List every outside resource you used for this assignment: websites, videos, textbooks, people you
 discussed the assignment with, and AI tools. For each one, say briefly what you used it for. For an AI
@@ -16,4 +16,7 @@ Using a resource you do not cite is an academic integrity violation, even if the
 - Office hours with a TA: help finding why my tail pointer was wrong after sorting.
 - ChatGPT: asked "what does std::string::npos mean?"
 -->
+
+**References**
+-How To Program C++ Tenth Edition by Paul & Harvey Deitel, reviewed section on how to implement a recursive mergesort
 

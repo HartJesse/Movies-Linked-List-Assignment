@@ -14,6 +14,8 @@
 #include <string>
 #include "movies.h"
 
+//create a new node with passed in value(Movie),
+//add it to the END of the current linked list, keep track of current list size
 void appendNode(MovieList& list, const Movie& m) {
 
     Node* newNode = new Node;
@@ -37,6 +39,10 @@ void appendNode(MovieList& list, const Movie& m) {
     list.size++;
 }
 
+/*compare two node's data
+  sorting by year is priority 1
+  else we sort by title of film (alphabetical) priority 2
+  else we sort by name of actor (alphabetical) priority 3*/
 bool comesBefore(const Movie& a, const Movie& b) 
 {
     //check if year is correct
@@ -51,49 +57,51 @@ bool comesBefore(const Movie& a, const Movie& b)
     return a.actor < b.actor;
  }
 
-//helper func for mergesort
+/*helper func for mergesort, */
 static void splitList(Node* head, Node** front, Node** back)
 {
+    //case 1: no list to be split (zero or one node(s))
     if (head == nullptr || head->next == nullptr)
     {
-        *front = head;
+        *front = head; //dereference pointer to access original pointer passed in, point it at head
         *back = nullptr;
         return;
     }
 
-    Node* slow = head;
-    Node* fast = head->next;
+    Node* current = head;
+    Node* runner = head->next;
 
-    //find midpoint of list
-    while (fast != nullptr)
+    //find midpoint of list by traversing with two pointers 
+    //one moving twice as fast as the other
+    while (runner != nullptr)
         {
-            fast = fast->next;
-            if (fast != nullptr)
+            runner = runner->next;
+            if (runner != nullptr)
             {
-                slow = slow->next;
-                fast = fast->next;
+                current = current->next;
+                runner = runner->next;
             }
         }
     *front = head;
-    *back = slow->next;
+    *back = current->next;
 
-    slow->next->prev = nullptr;
-    slow->next = nullptr;
+    current->next->prev = nullptr;
+    current->next = nullptr;
 }
 
 //helper func for mergesort
-static Node* sortedMerge(Node* a, Node* b)
+static Node* sortedMerge(Node* leftSide, Node* rightSide)
 {
-    if ( a == nullptr) return b;
-    if (b == nullptr) return a;
+    if ( leftSide == nullptr) return rightSide;
+    if (rightSide == nullptr) return leftSide;
 
     Node* result = nullptr;
 
-    //make comparison
-    if (comesBefore(a->data, b->data) || !comesBefore(b->data, a->data))
+    //make comparison must handle duplicate case here during soring sorting
+    if (comesBefore(leftSide->data, rightSide->data) || !comesBefore(rightSide->data, leftSide->data))
     {
-        result = a;
-        result->next = sortedMerge(a->next, b);
+        result = leftSide;
+        result->next = sortedMerge(leftSide->next, rightSide);
         if (result->next != nullptr)
         {
             result->next->prev = result;
@@ -102,8 +110,8 @@ static Node* sortedMerge(Node* a, Node* b)
     }
     else
     {
-        result = b;
-        result->next = sortedMerge(a, b->next);
+        result = rightSide;
+        result->next = sortedMerge(leftSide, rightSide->next);
         if (result->next != nullptr)
         {
             result->next->prev = result;
@@ -135,6 +143,8 @@ static Node* mergeSortRecursive(Node* head)
     return sortedMerge(front, back);   
 }
 
+//sorting handled via mergesort helpers, clean up head and tail pointers 
+//after returning from sorting
 void sortList(MovieList& list) {
 
     if (list.head == nullptr || list.head->next == nullptr)
@@ -142,7 +152,7 @@ void sortList(MovieList& list) {
         return;
     }
 
-    // Sort the nodes recursively
+    // Sort the nodes recursively via mergesort
     list.head = mergeSortRecursive(list.head);
 
     // Re-anchor the tail pointer and clean up the head's prev pointer
